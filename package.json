@@ -1,0 +1,33 @@
+{
+  "name": "krippendorff-alpha",
+  "version": "1.0.0",
+  "description": "Krippendorff's alpha algorithm",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "http-server -c-1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tanbt/krippendorff-alpha.git"
+  },
+  "keywords": [
+    "krippendorff",
+    "alpha",
+    "inter-rater",
+    "reliability\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[C\u001b[C\u001b[3~\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[D\u001b[3~",
+    "\u001b[F"
+  ],
+  "author": "Tan Bui",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tanbt/krippendorff-alpha/issues"
+  },
+  "homepage": "https://github.com/tanbt/krippendorff-alpha#readme",
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  },
+  "dependencies": {
+    "papaparse": "^4.6.0"
+  }
+}
