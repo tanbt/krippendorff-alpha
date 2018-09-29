@@ -1,5 +1,12 @@
 import Krippendorff from './krippendorff.js';
+//import * as math from '../lib/math.min.js'
 //import '../lib/papaparse.js';
+
+//var c = [1,2,3];
+//var d = [3,2,1];
+var c = [0,3,1,0];
+var d = [0,3,1,0];
+console.log(math.sum(math.dotMultiply(c,d)))
 
 window.calculate = function calculate() {
     var file = document.getElementById('csvInput').files[0];

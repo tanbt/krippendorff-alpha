@@ -28,6 +28,7 @@
     "http-server": "^0.11.1"
   },
   "dependencies": {
+    "mathjs": "^5.1.2",
     "papaparse": "^4.6.0"
   }
 }
