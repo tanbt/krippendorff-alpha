@@ -2,6 +2,11 @@ import Krippendorff from './krippendorff.js';
 //import * as math from '../lib/math.min.js'
 //import '../lib/papaparse.js';
 
+const array = [[2, 0], [-1, 3]]               // Array
+const matrix = math.matrix([[7, 1], [-2, 3]]) // Matrix
+console.log(math.multiply(array, matrix));
+//console.log(math.multiply(math.matrix(array), matrix));   //same
+
 //var c = [1,2,3];
 //var d = [3,2,1];
 var c = [0,3,1,0];
