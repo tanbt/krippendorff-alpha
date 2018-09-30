@@ -1,6 +1,6 @@
 export default class Krippendorff {
-    constructor() {
-        this._data = "Example data";
+    constructor(data) {
+        this._data = data;
     }
 
     get data() {

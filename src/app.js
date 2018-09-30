@@ -1,21 +1,5 @@
-import Krippendorff from './krippendorff.js';
-//import * as math from '../lib/math.min.js'
-//import '../lib/papaparse.js';
-
-const arMatrix = math.matrix([[0.176470588, 0.235294118, 0.323529412, 0.264705882]]);
-console.log(arMatrix);
-console.log(math.transpose(arMatrix));
-
-const array = [[2, 0], [-1, 3]]               // Array
-const matrix = math.matrix([[7, 1], [-2, 3]]) // Matrix
-console.log(math.multiply(array, matrix));
-//console.log(math.multiply(math.matrix(array), matrix));   //same
-
-//var c = [1,2,3];
-//var d = [3,2,1];
-var c = [0,3,1,0];
-var d = [0,3,1,0];
-console.log(math.sum(math.dotMultiply(c,d)))
+import Papa from 'papaparse';
+import Krippendorff from './modules/krippendorff.js';
 
 window.calculate = function calculate() {
     var file = document.getElementById('csvInput').files[0];
@@ -28,7 +12,9 @@ window.calculate = function calculate() {
     promise.then(() => getFileContent(file))
         .then((result) => {
             const content = result.target.result;
-            out(JSON.stringify(parseCSVToArray(content).data));
+            let arrData = parseCSVToArray(content).data;
+            let kripCal = new Krippendorff(arrData);
+            out(JSON.stringify(kripCal.data));
         });
 }
 

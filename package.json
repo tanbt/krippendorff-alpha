@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "start": "http-server -c-1"
+    "build": "webpack",
+    "start": "webpack-dev-server --output-public-path=/dist/"
   },
   "repository": {
     "type": "git",
@@ -25,10 +26,12 @@
   },
   "homepage": "https://github.com/tanbt/krippendorff-alpha#readme",
   "devDependencies": {
-    "http-server": "^0.11.1"
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2"
   },
   "dependencies": {
     "mathjs": "^5.1.2",
-    "papaparse": "^4.6.0"
+    "papaparse": "^4.6.0",
+    "webpack-dev-server": "^3.1.9"
   }
 }
