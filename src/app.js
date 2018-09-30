@@ -14,7 +14,7 @@ window.calculate = function calculate() {
             const content = result.target.result;
             let arrData = parseCSVToArray(content).data;
             let kripCal = new Krippendorff(arrData);
-            out(JSON.stringify(kripCal.data));
+            out(JSON.stringify(kripCal.matrix));
         });
 }
 
@@ -35,7 +35,7 @@ function parseCSVToArray(csvString) {
         complete: undefined,
         error: undefined,
         download: false,
-        skipEmptyLines: false,
+        skipEmptyLines: true,
         chunk: undefined,
         fastMode: undefined,
         beforeFirstChunk: undefined,

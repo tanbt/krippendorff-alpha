@@ -1,13 +1,24 @@
+import * as math from "mathjs";
+
+/**
+ * Calculate Krippendorff's Alpha of a matrix of rating table
+ */
 export default class Krippendorff {
+
+    /**
+     * Init the calculator
+     *
+     * @param {*} data An javascript 2D array
+     */
     constructor(data) {
-        this._data = data;
+        this._matrix = math.matrix(data);
     }
 
-    get data() {
-        return this._data;
+    get matrix() {
+        return this._matrix;
     }
 
-    set data(input) {
-        this._data = input;
+    set matrix(input) {
+        this._matrix = input;
     }
 }
