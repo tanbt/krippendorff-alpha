@@ -1,5 +1,5 @@
 import Papa from 'papaparse';
-import Krippendorff from '../src/krippendorff.js';
+import Krippendorff from '../../src/krippendorff.js';
 
 window.calculate = function calculate() {
     var file = document.getElementById('csvInput').files[0];

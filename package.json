@@ -4,9 +4,9 @@
   "description": "Krippendorff's alpha algorithm",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require @babel/register --recursive \"./src/test/*.js\"",
-    "build": "webpack",
-    "start": "webpack-dev-server --output-public-path=/dist/"
+    "test": "mocha --require @babel/register",
+    "build": "webpack && gulp dist",
+    "start": "webpack-dev-server --output-public-path=/demo/"
   },
   "repository": {
     "type": "git",
