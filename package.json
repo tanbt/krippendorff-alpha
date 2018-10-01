@@ -26,6 +26,15 @@
   },
   "homepage": "https://github.com/tanbt/krippendorff-alpha#readme",
   "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "babel-eslint": "^10.0.1",
+    "eslint-config-gulp": "^3.0.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-eslint": "^5.0.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-uglify": "^3.0.1",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2"
   },

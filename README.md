@@ -4,9 +4,16 @@ Measurement of inter-rater reliability
 #### Installation
 * At project root, run `npm install`
 
-#### Depolyment
-* At project root, run `npm run start`
+#### Demo
+* To bundle the app for demo, run `npm run build`
+* At project root, run `npm start`
 * Access `http://localhost:3000`
+
+#### Development and Depolyment
+* To test the library, run `gulp test`
+* To verify `src/*.js`, run `gulp lint:js`
+* To publish kripendorff library: run `gulp dist`.
+The file `dist/krippendorff.min.js` will be re-generated and ready to use.
 
 #### References
 * [Matrix](http://mathjs.org/docs/reference/functions.html#matrix-functions) in Mathjs
