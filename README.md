@@ -18,3 +18,4 @@ The file `dist/krippendorff.min.js` will be re-generated and ready to use.
 #### References
 * [Matrix](http://mathjs.org/docs/reference/functions.html#matrix-functions) in Mathjs
 * [ES6 module structure](https://medium.com/@svinkle/getting-started-with-webpack-and-es6-modules-c465d053d988)
+* [Testing syntax](https://github.com/Automattic/expect.js)
