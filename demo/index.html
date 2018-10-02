@@ -9,12 +9,61 @@
 
 <body>
 
-<input type="file" name="csv" id="csvInput" autofocus>
-<br/>
-<button onclick="calculate()">Submit</button>
+    <input type="file" name="csv" id="csvInput" autofocus>
+    <div class="data-type-selection">
+        <select name="data-type" id="dataType" onchange="selectDataType()">
+            <option value='' selected>Please select a data type</option>
+            <option value="categorical">Categorical</option>
+            <option value="ordinal">Ordinal</option>
+            <option value="interval">Interval</option>
+            <option value="ratio">Ratio</option>
+        </select>
 
-<div id="output"></div>
-<script src="bundle.js"></script>
+        <div id="categorical" class="data-type categorical">
+            <p>
+                Categorical or Nominal represent types of data which may be divided into groups.<br />
+                Examples of categorical variables are color, sex, age group, and educational level.
+            </p>
+            Please enter categorical values for your data, separated by a semi-colon:<br />
+            For example, for Color, it is: <i>red; green; blue</i><br />
+            <textarea id="categorical-values" cols="80"></textarea>
+        </div>
+
+        <div id="ordinal" class="data-type ordinal">
+            <p>
+                Ordinal data is a categorical, statistical data type where the variables have natural, ordered
+                categories and the distances between the categories is not known.
+            </p>
+            Please enter ordinal values for your data, separated by a semi-colon:<br />
+            For example, for Emotions, it is: <i>Very unhappy; Unhappy; OK; Happy; Very happy</i><br />
+            <textarea id="ordinal-values" cols="80"></textarea>
+        </div>
+
+        <div id="interval" class="data-type ordinal">
+            <p>
+                Interval data, also called an integer, is defined as a data type which is measured along a scale, in
+                which each point is placed at equal distance from one another. Interval data always appears in the form
+                of numbers or numerical values where the distance between the two points is standardized and equal.
+            </p>
+            Please enter your value range, including the start and end numbers:<br />
+            [<input type="number" id="ordinal-start"> - <input type="number" id="ordinal-end">]
+        </div>
+
+        <div id="ratio" class="data-type ratio">
+            <p>
+                In a ratio scale, numbers can be compared as multiples of one another. Thus one person can be twice as
+                tall as another person. Important also, the number zero means: does not exist.
+            </p>
+            Please enter your value range, including the start and end numbers:<br />
+            [<input type="number" id="ratio-start"> - <input type="number" id="ratio-end">]
+        </div>
+
+    </div>
+    <br />
+    <button onclick="calculate()">Submit</button>
+
+    <div id="output"></div>
+    <script src="bundle.js"></script>
 
 </body>
 
