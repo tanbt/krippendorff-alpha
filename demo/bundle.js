@@ -102,60 +102,61 @@ __webpack_require__.r(__webpack_exports__);
 
 
 window.calculate = function calculate() {
-    var file = document.getElementById('csvInput').files[0];
-    if (!file) {
-        out('Please select a file');
-        return;
-    }
+  var file = document.getElementById('csvInput').files[0];
+  if (!file) {
+    out('Please select a file');
+    return;
+  }
 
-    var promise = Promise.resolve();
-    promise.then(() => getFileContent(file))
-        .then((result) => {
-            const content = result.target.result;
-            let arrData = parseCSVToArray(content).data;
-            let kripCal = new _src_krippendorff_js__WEBPACK_IMPORTED_MODULE_1__["default"](arrData);
-            out(JSON.stringify(kripCal.matrix));
-        });
-}
+  var promise = Promise.resolve();
+  promise.then(() => getFileContent(file))
+    .then((result) => {
+      const content = result.target.result;
+      let arrData = parseCSVToArray(content).data;
+      let kripCal = new _src_krippendorff_js__WEBPACK_IMPORTED_MODULE_1__["default"](arrData);
+      out(JSON.stringify(kripCal._matrix) + '<br/>' + kripCal._dataType);
+    });
+};
 
 function parseCSVToArray(csvString) {
-    const config = {
-        delimiter: "",	// auto-detect
-        newline: "",	// auto-detect
-        quoteChar: '"',
-        escapeChar: '"',
-        header: false,
-        trimHeaders: false,
-        dynamicTyping: false,
-        preview: 0,
-        encoding: "",
-        worker: false,
-        comments: false,
-        step: undefined,
-        complete: undefined,
-        error: undefined,
-        download: false,
-        skipEmptyLines: true,
-        chunk: undefined,
-        fastMode: undefined,
-        beforeFirstChunk: undefined,
-        withCredentials: undefined,
-        transform: undefined
-    }
-    return papaparse__WEBPACK_IMPORTED_MODULE_0___default.a.parse(csvString, config);
+  const config = {
+    delimiter: '',	// auto-detect
+    newline: '',	// auto-detect
+    quoteChar: '"',
+    escapeChar: '"',
+    header: false,
+    trimHeaders: false,
+    dynamicTyping: false,
+    preview: 0,
+    encoding: '',
+    worker: false,
+    comments: false,
+    step: undefined,
+    complete: undefined,
+    error: undefined,
+    download: false,
+    skipEmptyLines: true,
+    chunk: undefined,
+    fastMode: undefined,
+    beforeFirstChunk: undefined,
+    withCredentials: undefined,
+    transform: undefined,
+  };
+  return papaparse__WEBPACK_IMPORTED_MODULE_0___default.a.parse(csvString, config);
 }
 
 function getFileContent(fileDOM, output) {
-    return new Promise((resolve, reject) => {
-        let reader = new FileReader();
-        reader.onload = resolve;
-        reader.readAsText(fileDOM);
-    });
+  return new Promise((resolve, reject) => {
+    let reader = new FileReader();
+    reader.onload = resolve;
+    reader.readAsText(fileDOM);
+  });
 }
 
 function out(text) {
-    document.getElementById('output').innerHTML = text;
+  document.getElementById('output').innerHTML = text;
 }
+
 
 /***/ }),
 
@@ -72708,27 +72709,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mathjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mathjs__WEBPACK_IMPORTED_MODULE_0__);
 
 
+const DATATYPE = {
+  categorical: 1,
+  ordinal: 2,
+  interval: 3,
+  ratio: 4,
+};
+Object.freeze(DATATYPE);
+
 /**
  * Calculate Krippendorff's Alpha of a matrix of rating table
  */
 class Krippendorff {
-
   /**
      * Init the calculator
      *
-     * @param {*} data An javascript 2D array
+     * @param array data An javascript 2D array
+     * @param string dataType The data type of rating
      */
-  constructor(data) {
+  constructor(data, dataType) {
+    this._dataType = DATATYPE[dataType];
+    if (!dataType) {
+      this._dataType = DATATYPE['categorical'];
+    }
     this._matrix = mathjs__WEBPACK_IMPORTED_MODULE_0__["matrix"](data);
   }
 
-  get matrix() {
-    return this._matrix;
-  }
-
-  set matrix(input) {
-    this._matrix = input;
-  }
 }
 
 

@@ -2,19 +2,24 @@ import Papa from 'papaparse';
 import Krippendorff from '../../src/krippendorff.js';
 
 window.calculate = function calculate() {
-  var file = document.getElementById('csvInput').files[0];
+  let file = document.getElementById('csvInput').files[0];
   if (!file) {
     out('Please select a file');
     return;
   }
+  let dataType = document.getElementById('dataType').value;
+  if (!dataType) {
+    out('Please select a data type');
+    return;
+  }
 
-  var promise = Promise.resolve();
+  let promise = Promise.resolve();
   promise.then(() => getFileContent(file))
     .then((result) => {
       const content = result.target.result;
       let arrData = parseCSVToArray(content).data;
-      let kripCal = new Krippendorff(arrData);
-      out(JSON.stringify(kripCal.matrix));
+      let kripCal = new Krippendorff(arrData, dataType);
+      out(JSON.stringify(kripCal._matrix) + '<br/>' + kripCal._dataType);
     });
 };
 
