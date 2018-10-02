@@ -11,6 +11,7 @@ Measurement of inter-rater reliability
 
 #### Development and Depolyment
 * To test the library, run `gulp test`
+* To reformat js files, run `gulp run format`
 * To verify `src/*.js`, run `gulp lint:js`
 * To publish kripendorff library: run `gulp dist`.
 The file `dist/krippendorff.min.js` will be re-generated and ready to use.
