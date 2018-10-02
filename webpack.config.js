@@ -4,6 +4,7 @@ module.exports = {
         path: __dirname + "/demo",
         filename: 'bundle.js'
     },
+    devtool: "source-map",
     mode: 'development',
     devServer: {
         port: 3000,
