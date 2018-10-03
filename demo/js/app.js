@@ -12,6 +12,12 @@ window.calculate = function calculate() {
     out('Please select a data type');
     return;
   }
+  var strData = document.getElementById(dataType + '-values').value;
+  let ratingData = strData.split(';');
+  if (!ratingData[0]) {
+    out('Please enter rating data.');
+    return;
+  }
 
   let promise = Promise.resolve();
   promise.then(() => getFileContent(file))
@@ -59,7 +65,7 @@ function parseCSVToArray(csvString) {
   return Papa.parse(csvString, config);
 }
 
-function getFileContent(fileDOM, output) {
+function getFileContent(fileDOM) {
   return new Promise((resolve, reject) => {
     let reader = new FileReader();
     reader.onload = resolve;
