@@ -25,9 +25,15 @@ export default class Krippendorff {
       this._dataType = DATATYPE['categorical'];
     }
     let filteredData = this._removeEmptyItem(data);
-    this._matrix = math.matrix(filteredData);
-    this._values = this._getUniqueRatingValues(filteredData);
-    this._agreementTable = this._getAgreementTable(filteredData, this._values);
+    //this._matrix = math.matrix(filteredData);
+    this._ratingValues = this._getUniqueRatingValues(filteredData);
+    this._agreementTable = this._getAgreementTable(filteredData, this._ratingValues);
+    this._weightMatrix = this._getWeightMatrix(this._ratingValues, this._dataType);
+    this._weightAgreementMatrix = this._getWeightedAgreementMatrix(this._agreementTable, this._weightMatrix);
+  }
+
+  _getWeightedAgreementMatrix(agreementTable, weightMatrix) {
+    return math.multiply(agreementTable, weightMatrix);
   }
 
   _getAgreementTable(array2D, ratingValues) {
@@ -41,6 +47,39 @@ export default class Krippendorff {
       result.push(subject);
     });
     return result;
+  }
+
+  /**
+   * Calculate weight matrix based on data type
+   *
+   * @param {*} ratingValues unique values of ratings
+   * @param Integer dataType Data type from DATATYPE
+   */
+  _getWeightMatrix(ratingValues, dataType) {
+    let result = [];
+    let q = ratingValues.length;
+    let h, k;
+    for(h = 0; h < q; h++) {
+      let row = [];
+      for(k = 0; k < q; k++) {
+        row.push(this._calculateWeight(ratingValues, h, k, dataType));
+      }
+      result.push(row);
+    }
+    return math.matrix(result);
+  }
+
+  _calculateWeight(ratingValues, h, k, dataType) {
+    switch (dataType) {
+      case DATATYPE['interval']:
+        return 1; // todo: calculate later
+      case DATATYPE['ordinal']:
+        return 1; // todo: calculate later
+      case DATATYPE['interval']:
+        return 1; // todo: calculate later
+      default:  //categorical
+        return (ratingValues[h] === ratingValues[k]) ? 1 : 0;
+    }
   }
 
   /**

@@ -19,7 +19,7 @@ window.calculate = function calculate() {
       const content = result.target.result;
       let arrData = parseCSVToArray(content).data;
       let kripCal = new Krippendorff(arrData, dataType);
-      out(JSON.stringify(kripCal._matrix) + '<br/>' + kripCal._dataType);
+      out(JSON.stringify(kripCal));
     });
 };
 
