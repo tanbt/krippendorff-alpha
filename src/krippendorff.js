@@ -27,7 +27,20 @@ export default class Krippendorff {
     let filteredData = this._removeEmptyItem(data);
     this._matrix = math.matrix(filteredData);
     this._values = this._getUniqueRatingValues(filteredData);
-    // todo: calculate agreement table
+    this._agreementTable = this._getAgreementTable(filteredData, this._values);
+  }
+
+  _getAgreementTable(array2D, ratingValues) {
+    let result = [];
+    array2D.forEach(row => {
+      let subject = [];
+      ratingValues.forEach(val => {
+        let count = row.filter(v => v === val).length;
+        subject.push(count);
+      });
+      result.push(subject);
+    });
+    return result;
   }
 
   /**
