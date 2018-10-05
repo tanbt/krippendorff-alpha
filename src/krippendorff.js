@@ -30,6 +30,18 @@ export default class Krippendorff {
     this._agreementTable = this._getAgreementTable(filteredData, this._ratingValues);
     this._weightMatrix = this._getWeightMatrix(this._ratingValues, this._dataType);
     this._weightAgreementMatrix = this._getWeightedAgreementMatrix(this._agreementTable, this._weightMatrix);
+    this._n = this._weightAgreementMatrix._size[0];
+    this._q = this._weightAgreementMatrix._size[1];
+    this._r = this._getArrayOfR(this._weightAgreementMatrix);
+    this._rMean = this._arraySum(this._r) / this._n;
+  }
+
+  _getArrayOfR(weightAgreementMatrix) {
+    let result = [];
+    weightAgreementMatrix._data.forEach(sub => {
+      result.push(this._arraySum(sub));
+    })
+    return  result;
   }
 
   _getWeightedAgreementMatrix(agreementTable, weightMatrix) {
@@ -98,6 +110,10 @@ export default class Krippendorff {
 
   _isEmptyItemValue(val) {
     return val === '' || val === '#';
+  }
+
+  _arraySum(arr) {
+    return arr.reduce((a, b) => a + b, 0);
   }
 
   /**
