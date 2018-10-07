@@ -48,7 +48,7 @@ export default class Krippendorff {
   }
 
   _getPa(pArray, epsilon) {
-    return this._arrayAverage(pArray)*(1 - epsilon) + epsilon;
+    return this._arrayAverage(pArray) * (1 - epsilon) + epsilon;
   }
 
   _getArrayOfPi(agreementTable, epsilon) {
@@ -71,7 +71,7 @@ export default class Krippendorff {
       const agree = agreementTable[i];
       const decresedWeightAgree = weightAgreementMatrix._data[i].map(x => x - 1);
       const sumProduct = math.sum(math.dotMultiply(agree,decresedWeightAgree));
-      const divide = this._rMean*(this._rArray[i]-1);
+      const divide = this._rMean * (this._rArray[i] - 1);
       result.push(sumProduct / divide);
     }
     return result;
@@ -81,7 +81,7 @@ export default class Krippendorff {
     let result = [];
     weightAgreementMatrix._data.forEach(sub => {
       result.push(this._arraySum(sub));
-    })
+    });
     return  result;
   }
 
@@ -112,9 +112,9 @@ export default class Krippendorff {
     let result = [];
     let q = ratingValues.length;
     let h, k;
-    for(h = 0; h < q; h++) {
+    for (h = 0; h < q; h++) {
       let row = [];
-      for(k = 0; k < q; k++) {
+      for (k = 0; k < q; k++) {
         row.push(this._calculateWeight(ratingValues, h, k, dataType));
       }
       result.push(row);
@@ -128,9 +128,9 @@ export default class Krippendorff {
         return 1; // todo: calculate later
       case DATATYPE['ordinal']:
         return 1; // todo: calculate later
-      case DATATYPE['interval']:
+      case DATATYPE['ratio']:
         return 1; // todo: calculate later
-      default:  //categorical
+      default:  // categorical
         return (ratingValues[h] === ratingValues[k]) ? 1 : 0;
     }
   }

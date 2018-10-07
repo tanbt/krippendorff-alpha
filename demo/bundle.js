@@ -119,7 +119,7 @@ window.calculate = function calculate() {
       const content = result.target.result;
       let arrData = parseCSVToArray(content).data;
       let kripCal = new _src_krippendorff_js__WEBPACK_IMPORTED_MODULE_1__["default"](arrData, dataType);
-      out(JSON.stringify(kripCal._matrix) + '<br/>' + kripCal._dataType);
+      out(JSON.stringify(kripCal._KrAlpha));
     });
 };
 
@@ -72739,9 +72739,114 @@ class Krippendorff {
       this._dataType = DATATYPE['categorical'];
     }
     let filteredData = this._removeEmptyItem(data);
-    this._matrix = mathjs__WEBPACK_IMPORTED_MODULE_0__["matrix"](filteredData);
-    this._values = this._getUniqueRatingValues(filteredData);
-    // todo: calculate agreement table
+    this._ratingValues = this._getUniqueRatingValues(filteredData);
+    this._agreementTable = this._getAgreementTable(filteredData, this._ratingValues);
+    this._weightMatrix = this._getWeightMatrix(this._ratingValues, this._dataType);
+    this._weightAgreementMatrix = this._getWeightedAgreementMatrix(this._agreementTable, this._weightMatrix);
+    this._n = this._weightAgreementMatrix._size[0];
+    this._q = this._weightAgreementMatrix._size[1];
+    this._rArray = this._getArrayOfR(this._weightAgreementMatrix);
+    this._rMean = this._arraySum(this._rArray) / this._n;
+    this._pArray = this._getArrayOfP(this._agreementTable, this._weightAgreementMatrix);
+    this._epsilon = 1 / (this._n * this._rMean);
+    this._piArray = this._getArrayOfPi(this._agreementTable, this._epsilon);
+    this._pa = this._getPa(this._pArray, this._epsilon);
+    this._pe = this._getPe(this._piArray, this._weightMatrix);
+    this._KrAlpha = (this._pa - this._pe) / (1 - this._pe);
+  }
+
+  _getPe(piArray, weightMatrix) {
+    const piMatrix = mathjs__WEBPACK_IMPORTED_MODULE_0__["matrix"]([piArray]);
+    let AAT = mathjs__WEBPACK_IMPORTED_MODULE_0__["multiply"](mathjs__WEBPACK_IMPORTED_MODULE_0__["transpose"](piMatrix),piMatrix);
+    return mathjs__WEBPACK_IMPORTED_MODULE_0__["sum"](mathjs__WEBPACK_IMPORTED_MODULE_0__["dotMultiply"](AAT, weightMatrix));
+  }
+
+  _getPa(pArray, epsilon) {
+    return this._arrayAverage(pArray)*(1 - epsilon) + epsilon;
+  }
+
+  _getArrayOfPi(agreementTable, epsilon) {
+    const agreementMatrix = mathjs__WEBPACK_IMPORTED_MODULE_0__["matrix"](agreementTable);
+    const transposedArray = mathjs__WEBPACK_IMPORTED_MODULE_0__["transpose"](agreementMatrix)._data;
+    let result = [];
+    transposedArray.forEach(arr => {
+      result.push(this._arraySum(arr) * epsilon);
+    });
+    return result;
+  }
+
+  /**
+   * Make sure this function is called after this._n and this._rMean are calculated.
+   */
+  _getArrayOfP(agreementTable, weightAgreementMatrix) {
+    let result = [];
+    let i;
+    for (i = 0; i < this._n; i++) {
+      const agree = agreementTable[i];
+      const decresedWeightAgree = weightAgreementMatrix._data[i].map(x => x - 1);
+      const sumProduct = mathjs__WEBPACK_IMPORTED_MODULE_0__["sum"](mathjs__WEBPACK_IMPORTED_MODULE_0__["dotMultiply"](agree,decresedWeightAgree));
+      const divide = this._rMean*(this._rArray[i]-1);
+      result.push(sumProduct / divide);
+    }
+    return result;
+  }
+
+  _getArrayOfR(weightAgreementMatrix) {
+    let result = [];
+    weightAgreementMatrix._data.forEach(sub => {
+      result.push(this._arraySum(sub));
+    })
+    return  result;
+  }
+
+  _getWeightedAgreementMatrix(agreementTable, weightMatrix) {
+    return mathjs__WEBPACK_IMPORTED_MODULE_0__["multiply"](agreementTable, weightMatrix);
+  }
+
+  _getAgreementTable(array2D, ratingValues) {
+    let result = [];
+    array2D.forEach(row => {
+      let subject = [];
+      ratingValues.forEach(val => {
+        let count = row.filter(v => v === val).length;
+        subject.push(count);
+      });
+      result.push(subject);
+    });
+    return result;
+  }
+
+  /**
+   * Calculate weight matrix based on data type
+   *
+   * @param {*} ratingValues unique values of ratings
+   * @param Integer dataType Data type from DATATYPE
+   */
+  _getWeightMatrix(ratingValues, dataType) {
+    let result = [];
+    let q = ratingValues.length;
+    let h, k;
+    for(h = 0; h < q; h++) {
+      let row = [];
+      for(k = 0; k < q; k++) {
+        row.push(this._calculateWeight(ratingValues, h, k, dataType));
+      }
+      result.push(row);
+    }
+    return mathjs__WEBPACK_IMPORTED_MODULE_0__["matrix"](result);
+  }
+
+  _calculateWeight(ratingValues, h, k, dataType) {
+    switch (dataType) {
+      case DATATYPE['interval']:
+        return 1; // todo: calculate later
+      case DATATYPE['ordinal']:
+        return 1; // todo: calculate later
+      case DATATYPE['interval']:
+        return 1; // todo: calculate later
+      default:  //categorical
+        return (ratingValues[h] === ratingValues[k]) ? 1 : 0;
+    }
   }
 
   /**
@@ -72760,6 +72865,14 @@ class Krippendorff {
 
   _isEmptyItemValue(val) {
     return val === '' || val === '#';
+  }
+
+  _arraySum(arr) {
+    return arr.reduce((a, b) => a + b, 0);
+  }
+
+  _arrayAverage(arr) {
+    return this._arraySum(arr) / arr.length;
   }
 
   /**

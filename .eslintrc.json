@@ -8,5 +8,8 @@
   "parser": "babel-eslint",
   "parserOptions": {
     "sourceType": "module"
+  },
+  "rules": {
+    "max-len": "off"
   }
 }
