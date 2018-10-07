@@ -32,10 +32,26 @@ export default class Krippendorff {
     this._weightAgreementMatrix = this._getWeightedAgreementMatrix(this._agreementTable, this._weightMatrix);
     this._n = this._weightAgreementMatrix._size[0];
     this._q = this._weightAgreementMatrix._size[1];
-    this._r = this._getArrayOfR(this._weightAgreementMatrix);
-    this._rMean = this._arraySum(this._r) / this._n;
-    this._p = this._getArrayOfP(this._agreementTable, this._weightAgreementMatrix);
+    this._rArray = this._getArrayOfR(this._weightAgreementMatrix);
+    this._rMean = this._arraySum(this._rArray) / this._n;
+    this._pArray = this._getArrayOfP(this._agreementTable, this._weightAgreementMatrix);
     this._epsilon = 1 / (this._n * this._rMean);
+    this._piArray = this._getArrayOfPi(this._agreementTable, this._epsilon);
+    this._pa = this._getPa(this._pArray, this._epsilon);
+  }
+
+  _getPa(pArray, epsilon) {
+    return this._arrayAverage(pArray)*(1 - epsilon) + epsilon;
+  }
+
+  _getArrayOfPi(agreementTable, epsilon) {
+    const agreementMatrix = math.matrix(agreementTable);
+    const transposedArray = math.transpose(agreementMatrix)._data;
+    let result = [];
+    transposedArray.forEach(arr => {
+      result.push(this._arraySum(arr) * epsilon);
+    });
+    return result;
   }
 
   /**
@@ -48,7 +64,7 @@ export default class Krippendorff {
       const agree = agreementTable[i];
       const decresedWeightAgree = weightAgreementMatrix._data[i].map(x => x - 1);
       const sumProduct = math.sum(math.dotMultiply(agree,decresedWeightAgree));
-      const divide = this._rMean*(this._r[i]-1);
+      const divide = this._rMean*(this._rArray[i]-1);
       result.push(sumProduct / divide);
     }
     return result;
@@ -132,6 +148,10 @@ export default class Krippendorff {
 
   _arraySum(arr) {
     return arr.reduce((a, b) => a + b, 0);
+  }
+
+  _arrayAverage(arr) {
+    return this._arraySum(arr) / arr.length;
   }
 
   /**
