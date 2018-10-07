@@ -22,3 +22,4 @@ The file `dist/krippendorff.min.js` will be re-generated and ready to use.
 * [Testing syntax](https://github.com/Automattic/expect.js)
 * Configure devtool source map for debugging [video](https://www.youtube.com/watch?v=yk20pAUztLo), [documentation](https://webpack.js.org/configuration/devtool/#devtool)
 * [Krippendorff's Alpha](http://www.real-statistics.com/reliability/krippendorffs-alpha/krippendorffs-alpha-basic-concepts/)
+* [Krippendorff's alpha calculator](http://dfreelon.org/utils/recalfront/recal-oir/)

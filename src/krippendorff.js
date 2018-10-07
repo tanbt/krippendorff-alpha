@@ -25,7 +25,6 @@ export default class Krippendorff {
       this._dataType = DATATYPE['categorical'];
     }
     let filteredData = this._removeEmptyItem(data);
-    //this._matrix = math.matrix(filteredData);
     this._ratingValues = this._getUniqueRatingValues(filteredData);
     this._agreementTable = this._getAgreementTable(filteredData, this._ratingValues);
     this._weightMatrix = this._getWeightMatrix(this._ratingValues, this._dataType);
@@ -38,6 +37,14 @@ export default class Krippendorff {
     this._epsilon = 1 / (this._n * this._rMean);
     this._piArray = this._getArrayOfPi(this._agreementTable, this._epsilon);
     this._pa = this._getPa(this._pArray, this._epsilon);
+    this._pe = this._getPe(this._piArray, this._weightMatrix);
+    this._KrAlpha = (this._pa - this._pe) / (1 - this._pe);
+  }
+
+  _getPe(piArray, weightMatrix) {
+    const piMatrix = math.matrix([piArray]);
+    let AAT = math.multiply(math.transpose(piMatrix),piMatrix);
+    return math.sum(math.dotMultiply(AAT, weightMatrix));
   }
 
   _getPa(pArray, epsilon) {
