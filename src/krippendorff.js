@@ -132,9 +132,11 @@ export default class Krippendorff {
         const fac = math.combinations(this._q, 2);
         return 1 - (det / fac);
       case DATATYPE['interval']:
-        return 1; // todo: calculate later
+        const min = Math.min(...ratingValues); // convert array to function params
+        const max = Math.max(...ratingValues);
+        return 1 - math.pow((ratingValues[k] - ratingValues[h])/(max - min), 2);
       case DATATYPE['ratio']:
-        return 1; // todo: calculate later
+        return 1 - math.pow((ratingValues[k] - ratingValues[h])/(Number(ratingValues[k]) + Number(ratingValues[h])), 2);
       default:  // categorical
         return (ratingValues[h] === ratingValues[k]) ? 1 : 0;
     }
