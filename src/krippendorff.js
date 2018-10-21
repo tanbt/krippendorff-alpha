@@ -27,11 +27,11 @@ export default class Krippendorff {
     let filteredData = this._removeEmptyItem(data);
     this._ratingValues = this._getUniqueRatingValues(filteredData);
     this._agreementTable = this._getAgreementTable(filteredData, this._ratingValues);
+    this._n = this._agreementTable.length;
+    this._q = this._agreementTable[0].length;
     this._weightMatrix = this._getWeightMatrix(this._ratingValues, this._dataType);
     this._weightAgreementMatrix = this._getWeightedAgreementMatrix(this._agreementTable, this._weightMatrix);
-    this._n = this._weightAgreementMatrix._size[0];
-    this._q = this._weightAgreementMatrix._size[1];
-    this._rArray = this._getArrayOfR(this._weightAgreementMatrix);
+    this._rArray = this._getArrayOfR(this._agreementTable);
     this._rMean = this._arraySum(this._rArray) / this._n;
     this._pArray = this._getArrayOfP(this._agreementTable, this._weightAgreementMatrix);
     this._epsilon = 1 / (this._n * this._rMean);
@@ -77,9 +77,9 @@ export default class Krippendorff {
     return result;
   }
 
-  _getArrayOfR(weightAgreementMatrix) {
+  _getArrayOfR(agreementTable) {
     let result = [];
-    weightAgreementMatrix._data.forEach(sub => {
+    agreementTable.forEach(sub => {
       result.push(this._arraySum(sub));
     });
     return  result;
@@ -124,9 +124,14 @@ export default class Krippendorff {
 
   _calculateWeight(ratingValues, h, k, dataType) {
     switch (dataType) {
-      case DATATYPE['interval']:
-        return 1; // todo: calculate later
       case DATATYPE['ordinal']:
+        if (k === h) {
+          return 1;
+        }
+        const det = math.combinations(math.abs(ratingValues[k] - ratingValues[h]) + 1, 2);
+        const fac = math.combinations(this._q, 2);
+        return 1 - (det / fac);
+      case DATATYPE['interval']:
         return 1; // todo: calculate later
       case DATATYPE['ratio']:
         return 1; // todo: calculate later
