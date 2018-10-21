@@ -43,7 +43,7 @@ export default class Krippendorff {
 
   _getPe(piArray, weightMatrix) {
     const piMatrix = math.matrix([piArray]);
-    let AAT = math.multiply(math.transpose(piMatrix),piMatrix);
+    let AAT = math.multiply(math.transpose(piMatrix), piMatrix);
     return math.sum(math.dotMultiply(AAT, weightMatrix));
   }
 
@@ -70,7 +70,7 @@ export default class Krippendorff {
     for (i = 0; i < this._n; i++) {
       const agree = agreementTable[i];
       const decresedWeightAgree = weightAgreementMatrix._data[i].map(x => x - 1);
-      const sumProduct = math.sum(math.dotMultiply(agree,decresedWeightAgree));
+      const sumProduct = math.sum(math.dotMultiply(agree, decresedWeightAgree));
       const divide = this._rMean * (this._rArray[i] - 1);
       result.push(sumProduct / divide);
     }
@@ -82,7 +82,7 @@ export default class Krippendorff {
     agreementTable.forEach(sub => {
       result.push(this._arraySum(sub));
     });
-    return  result;
+    return result;
   }
 
   _getWeightedAgreementMatrix(agreementTable, weightMatrix) {
@@ -125,18 +125,22 @@ export default class Krippendorff {
   _calculateWeight(ratingValues, h, k, dataType) {
     switch (dataType) {
       case DATATYPE['ordinal']:
+      {
         if (k === h) {
           return 1;
         }
         const det = math.combinations(math.abs(ratingValues[k] - ratingValues[h]) + 1, 2);
         const fac = math.combinations(this._q, 2);
         return 1 - (det / fac);
+      }
       case DATATYPE['interval']:
+      {
         const min = Math.min(...ratingValues); // convert array to function params
         const max = Math.max(...ratingValues);
-        return 1 - math.pow((ratingValues[k] - ratingValues[h])/(max - min), 2);
+        return 1 - math.pow((ratingValues[k] - ratingValues[h]) / (max - min), 2);
+      }
       case DATATYPE['ratio']:
-        return 1 - math.pow((ratingValues[k] - ratingValues[h])/(Number(ratingValues[k]) + Number(ratingValues[h])), 2);
+        return 1 - math.pow((ratingValues[k] - ratingValues[h]) / (Number(ratingValues[k]) + Number(ratingValues[h])), 2);
       default:  // categorical
         return (ratingValues[h] === ratingValues[k]) ? 1 : 0;
     }

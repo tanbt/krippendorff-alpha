@@ -50,8 +50,8 @@ function parseCSVToArray(csvString) {
   return Papa.parse(csvString, config);
 }
 
-function getFileContent(fileDOM, output) {
-  return new Promise((resolve, reject) => {
+function getFileContent(fileDOM) {
+  return new Promise((resolve) => {
     let reader = new FileReader();
     reader.onload = resolve;
     reader.readAsText(fileDOM);

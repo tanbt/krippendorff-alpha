@@ -10,8 +10,8 @@ Measurement of inter-rater reliability
 * Access `http://localhost:3000`
 
 #### Development and Depolyment
-* To test the library, run `gulp test`
-* To reformat js files, run `gulp run format`
+* To test the library, run `npm test`
+* To reformat js files, run `npm run format`
 * To verify `src/*.js`, run `gulp lint:js`
 * To publish kripendorff library: run `gulp dist`.
 The file `dist/krippendorff.min.js` will be re-generated and ready to use.
