@@ -19,6 +19,11 @@ describe('Krippendorff functionalities', function () {
       ["#", "#", "#", "#", "#"],
       ["#", "3", "#", "#", "#"]];
 
+    it('should use categorical as the default data type', function () {
+      let kripCal = new Krippendorff(exampleData);
+      expect(kripCal._KrAlpha).equal(0.16920374707259953);
+    });
+
     it('should return a correct categorical K-alpha', function () {
       const dataType = 'categorical';
       let kripCal = new Krippendorff(exampleData, dataType);

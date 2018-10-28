@@ -150,8 +150,8 @@ function parseCSVToArray(csvString) {
   return papaparse__WEBPACK_IMPORTED_MODULE_0___default.a.parse(csvString, config);
 }
 
-function getFileContent(fileDOM, output) {
-  return new Promise((resolve, reject) => {
+function getFileContent(fileDOM) {
+  return new Promise((resolve) => {
     let reader = new FileReader();
     reader.onload = resolve;
     reader.readAsText(fileDOM);
@@ -72741,11 +72741,11 @@ class Krippendorff {
     let filteredData = this._removeEmptyItem(data);
     this._ratingValues = this._getUniqueRatingValues(filteredData);
     this._agreementTable = this._getAgreementTable(filteredData, this._ratingValues);
+    this._n = this._agreementTable.length;
+    this._q = this._agreementTable[0].length;
     this._weightMatrix = this._getWeightMatrix(this._ratingValues, this._dataType);
     this._weightAgreementMatrix = this._getWeightedAgreementMatrix(this._agreementTable, this._weightMatrix);
-    this._n = this._weightAgreementMatrix._size[0];
-    this._q = this._weightAgreementMatrix._size[1];
-    this._rArray = this._getArrayOfR(this._weightAgreementMatrix);
+    this._rArray = this._getArrayOfR(this._agreementTable);
     this._rMean = this._arraySum(this._rArray) / this._n;
     this._pArray = this._getArrayOfP(this._agreementTable, this._weightAgreementMatrix);
     this._epsilon = 1 / (this._n * this._rMean);
@@ -72757,12 +72757,12 @@ class Krippendorff {
 
   _getPe(piArray, weightMatrix) {
     const piMatrix = mathjs__WEBPACK_IMPORTED_MODULE_0__["matrix"]([piArray]);
-    let AAT = mathjs__WEBPACK_IMPORTED_MODULE_0__["multiply"](mathjs__WEBPACK_IMPORTED_MODULE_0__["transpose"](piMatrix),piMatrix);
+    let AAT = mathjs__WEBPACK_IMPORTED_MODULE_0__["multiply"](mathjs__WEBPACK_IMPORTED_MODULE_0__["transpose"](piMatrix), piMatrix);
     return mathjs__WEBPACK_IMPORTED_MODULE_0__["sum"](mathjs__WEBPACK_IMPORTED_MODULE_0__["dotMultiply"](AAT, weightMatrix));
   }
 
   _getPa(pArray, epsilon) {
-    return this._arrayAverage(pArray)*(1 - epsilon) + epsilon;
+    return this._arrayAverage(pArray) * (1 - epsilon) + epsilon;
   }
 
   _getArrayOfPi(agreementTable, epsilon) {
@@ -72784,19 +72784,19 @@ class Krippendorff {
     for (i = 0; i < this._n; i++) {
       const agree = agreementTable[i];
       const decresedWeightAgree = weightAgreementMatrix._data[i].map(x => x - 1);
-      const sumProduct = mathjs__WEBPACK_IMPORTED_MODULE_0__["sum"](mathjs__WEBPACK_IMPORTED_MODULE_0__["dotMultiply"](agree,decresedWeightAgree));
-      const divide = this._rMean*(this._rArray[i]-1);
+      const sumProduct = mathjs__WEBPACK_IMPORTED_MODULE_0__["sum"](mathjs__WEBPACK_IMPORTED_MODULE_0__["dotMultiply"](agree, decresedWeightAgree));
+      const divide = this._rMean * (this._rArray[i] - 1);
       result.push(sumProduct / divide);
     }
     return result;
   }
 
-  _getArrayOfR(weightAgreementMatrix) {
+  _getArrayOfR(agreementTable) {
     let result = [];
-    weightAgreementMatrix._data.forEach(sub => {
+    agreementTable.forEach(sub => {
       result.push(this._arraySum(sub));
-    })
-    return  result;
+    });
+    return result;
   }
 
   _getWeightedAgreementMatrix(agreementTable, weightMatrix) {
@@ -72826,9 +72826,9 @@ class Krippendorff {
     let result = [];
     let q = ratingValues.length;
     let h, k;
-    for(h = 0; h < q; h++) {
+    for (h = 0; h < q; h++) {
       let row = [];
-      for(k = 0; k < q; k++) {
+      for (k = 0; k < q; k++) {
         row.push(this._calculateWeight(ratingValues, h, k, dataType));
       }
       result.push(row);
@@ -72838,13 +72838,24 @@ class Krippendorff {
 
   _calculateWeight(ratingValues, h, k, dataType) {
     switch (dataType) {
-      case DATATYPE['interval']:
-        return 1; // todo: calculate later
       case DATATYPE['ordinal']:
-        return 1; // todo: calculate later
+      {
+        if (k === h) {
+          return 1;
+        }
+        const det = mathjs__WEBPACK_IMPORTED_MODULE_0__["combinations"](mathjs__WEBPACK_IMPORTED_MODULE_0__["abs"](ratingValues[k] - ratingValues[h]) + 1, 2);
+        const fac = mathjs__WEBPACK_IMPORTED_MODULE_0__["combinations"](this._q, 2);
+        return 1 - (det / fac);
+      }
       case DATATYPE['interval']:
-        return 1; // todo: calculate later
-      default:  //categorical
+      {
+        const min = Math.min(...ratingValues); // convert array to function params
+        const max = Math.max(...ratingValues);
+        return 1 - mathjs__WEBPACK_IMPORTED_MODULE_0__["pow"]((ratingValues[k] - ratingValues[h]) / (max - min), 2);
+      }
+      case DATATYPE['ratio']:
+        return 1 - mathjs__WEBPACK_IMPORTED_MODULE_0__["pow"]((ratingValues[k] - ratingValues[h]) / (Number(ratingValues[k]) + Number(ratingValues[h])), 2);
+      default:  // categorical
         return (ratingValues[h] === ratingValues[k]) ? 1 : 0;
     }
   }
