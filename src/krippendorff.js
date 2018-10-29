@@ -14,17 +14,21 @@ Object.freeze(DATATYPE);
 export default class Krippendorff {
 
   /**
-     * Init the calculator
-     *
-     * @param array data An javascript 2D array showing all ratings
-     * @param string dataType The data type of rating
-     */
-  constructor(data, dataType) {
+   * Init data for the calculator
+   *
+   * @param array data An javascript 2D array showing all ratings
+   * @param string dataType The data type of rating
+   */
+  setArrayData(data, dataType) {
+    this._data = data;
     this._dataType = DATATYPE[dataType];
     if (!dataType) {
       this._dataType = DATATYPE['categorical'];
     }
-    let filteredData = this._removeEmptyItem(data);
+  }
+
+  calculate() {
+    let filteredData = this._removeEmptyItem(this._data);
     this._ratingValues = this._getUniqueRatingValues(filteredData);
     this._agreementTable = this._getAgreementTable(filteredData, this._ratingValues);
     this._n = this._agreementTable.length;
@@ -125,20 +129,20 @@ export default class Krippendorff {
   _calculateWeight(ratingValues, h, k, dataType) {
     switch (dataType) {
       case DATATYPE['ordinal']:
-      {
-        if (k === h) {
-          return 1;
+        {
+          if (k === h) {
+            return 1;
+          }
+          const det = math.combinations(math.abs(ratingValues[k] - ratingValues[h]) + 1, 2);
+          const fac = math.combinations(this._q, 2);
+          return 1 - (det / fac);
         }
-        const det = math.combinations(math.abs(ratingValues[k] - ratingValues[h]) + 1, 2);
-        const fac = math.combinations(this._q, 2);
-        return 1 - (det / fac);
-      }
       case DATATYPE['interval']:
-      {
-        const min = Math.min(...ratingValues); // convert array to function params
-        const max = Math.max(...ratingValues);
-        return 1 - math.pow((ratingValues[k] - ratingValues[h]) / (max - min), 2);
-      }
+        {
+          const min = Math.min(...ratingValues); // convert array to function params
+          const max = Math.max(...ratingValues);
+          return 1 - math.pow((ratingValues[k] - ratingValues[h]) / (max - min), 2);
+        }
       case DATATYPE['ratio']:
         return 1 - math.pow((ratingValues[k] - ratingValues[h]) / (Number(ratingValues[k]) + Number(ratingValues[h])), 2);
       default:  // categorical
