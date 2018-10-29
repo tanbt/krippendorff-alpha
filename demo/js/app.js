@@ -2,14 +2,24 @@ import Papa from 'papaparse';
 import Krippendorff from '../../src/krippendorff.js';
 
 window.calculate = function calculate() {
-  let file = document.getElementById('csvInput').files[0];
-  if (!file) {
-    out('Please select a file');
-    return;
-  }
   let dataType = document.getElementById('dataType').value;
   if (!dataType) {
     out('Please select a data type');
+    return;
+  }
+
+  let json = document.getElementById('jsonInput').value;
+  if (json) {
+    let kripCal = new Krippendorff();
+    kripCal.setJsonData(json, dataType);
+    kripCal.calculate();
+    out(kripCal._KrAlpha);
+    return;
+  }
+
+  let file = document.getElementById('csvInput').files[0];
+  if (!file) {
+    out('Please select a file');
     return;
   }
 
@@ -21,7 +31,7 @@ window.calculate = function calculate() {
       let kripCal = new Krippendorff();
       kripCal.setArrayData(arrData, dataType);
       kripCal.calculate();
-      out(JSON.stringify(kripCal._KrAlpha));
+      out(kripCal._KrAlpha);
     });
 };
 

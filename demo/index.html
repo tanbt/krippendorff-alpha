@@ -8,8 +8,7 @@
 </head>
 
 <body>
-
-    <input type="file" name="csv" id="csvInput" autofocus>
+    Please select a data type:<br />
     <div class="data-type-selection">
         <select name="data-type" id="dataType">
             <option value="categorical" selected>Categorical</option>
@@ -18,11 +17,18 @@
             <option value="ratio">Ratio</option>
         </select>
     </div>
-    <br />
+    <br /><br />
+    Then select csv data file: <br />
+    <input type="file" name="csv" id="csvInput" autofocus>
+    <br /><br />
+    Or enter a json string as data:<br />
+    <textarea name="json" id="jsonInput" rows="5" cols="50"></textarea>
+    <br /><br />
+
     <button onclick="calculate()">Submit</button>
 
-	<br/> <br/>
-	<a href="data/kirppendorff-demo.csv">Click here to download <b>Demo data</b></a>
+    <br /> <br />
+    <a href="data/kirppendorff-demo.csv">Click here to download <b>Demo data</b></a>
     <div id="output"></div>
     <script src="bundle.js"></script>
 

@@ -27,6 +27,22 @@ export default class Krippendorff {
     }
   }
 
+  /**
+   * Init data for the calculator
+   *
+   * @param json data json string showing all ratings
+   * @param string dataType The data type of rating
+   */
+  setJsonData(data, dataType) {
+    const jsonObj = JSON.parse(data);
+    this._data = Object.keys(jsonObj).map(function(_) { return jsonObj[_]; });
+
+    this._dataType = DATATYPE[dataType];
+    if (!dataType) {
+      this._dataType = DATATYPE['categorical'];
+    }
+  }
+
   calculate() {
     let filteredData = this._removeEmptyItem(this._data);
     this._ratingValues = this._getUniqueRatingValues(filteredData);
@@ -129,20 +145,20 @@ export default class Krippendorff {
   _calculateWeight(ratingValues, h, k, dataType) {
     switch (dataType) {
       case DATATYPE['ordinal']:
-        {
-          if (k === h) {
-            return 1;
-          }
-          const det = math.combinations(math.abs(ratingValues[k] - ratingValues[h]) + 1, 2);
-          const fac = math.combinations(this._q, 2);
-          return 1 - (det / fac);
+      {
+        if (k === h) {
+          return 1;
         }
+        const det = math.combinations(math.abs(ratingValues[k] - ratingValues[h]) + 1, 2);
+        const fac = math.combinations(this._q, 2);
+        return 1 - (det / fac);
+      }
       case DATATYPE['interval']:
-        {
-          const min = Math.min(...ratingValues); // convert array to function params
-          const max = Math.max(...ratingValues);
-          return 1 - math.pow((ratingValues[k] - ratingValues[h]) / (max - min), 2);
-        }
+      {
+        const min = Math.min(...ratingValues); // convert array to function params
+        const max = Math.max(...ratingValues);
+        return 1 - math.pow((ratingValues[k] - ratingValues[h]) / (max - min), 2);
+      }
       case DATATYPE['ratio']:
         return 1 - math.pow((ratingValues[k] - ratingValues[h]) / (Number(ratingValues[k]) + Number(ratingValues[h])), 2);
       default:  // categorical
