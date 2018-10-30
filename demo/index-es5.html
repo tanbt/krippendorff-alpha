@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Krippendorff's Alpha Calculator</title>
+    <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+    <p>This is a very simple demo for ES5.</p>
+    <p>There's just some hard-coded data for you can see how to use it in ES5.</p>
+    <p>Other features and options are exactly as same as <a href="index.html">ES6 version</a>.</p>
+    <br />These results should match with ES6 version results:<br />
+    <div id="output"></div>
+
+    <script src="../dist/krippendorff.es5.min.js"></script>
+    <script>
+        function outAppend(text) {
+            document.getElementById('output').innerHTML = document.getElementById('output').innerHTML + "<br/>" + text;
+        }
+
+        var arr = [
+            ["1", "2", "#", "3", "4"],
+            ["2", "2", "3", "2", "#"],
+            ["1", "1", "1", "2", "2"],
+            ["4", "4", "3", "4", "2"],
+            ["3", "3", "4", "#", "3"],
+            ["2", "#", "1", "1", "#"],
+            ["3", "3", "3", "4", "#"],
+            ["4", "3", "4", "3", "4"],
+            ["#", "#", "#", "#", "#"],
+            ["#", "3", "#", "#", "#"]];
+        outAppend("Categorical: " + kAlphaFromArray(arr, "categorical"));
+
+        var json = '{"doc1":["1","2","#","3","4"],"doc2":["2","2","3","2","#"],"doc4":["1","1","1","2","2"],"doc3":["4","4","3","4","2"],"doc5":["3","3","4","#","3"],"doc6":["2","#","1","1","#"],"doc7":["3","3","3","4","#"],"doc8":["4","3","4","3","4"],"doc9":["#","#","#","#","#"],"doc10":["#","3","#","#","#"]}';
+        outAppend("Ordinal: " + kAlphaFromJson(json, "ordinal"));
+    </script>
+</body>
+
+</html>

@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --require @babel/register",
-    "build": "webpack && gulp dist",
-    "format": "./node_modules/eslint/bin/eslint.js demo/js/*.js src/*.js --fix",
+    "build": "webpack",
     "start": "webpack-dev-server --output-public-path=/demo/"
   },
   "repository": {

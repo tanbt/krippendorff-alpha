@@ -11,9 +11,9 @@ Measurement of inter-rater reliability
 
 #### Development and Depolyment
 * To test the library, run `npm test`
-* To reformat js files, run `npm run format`
+* To reformat js files, run `./node_modules/eslint/bin/eslint.js demo/js/*.js src/*.js --fix`
 * To verify `src/*.js`, run `gulp lint:js`
-* To publish kripendorff library: run `gulp dist`.
+* To publish kripendorff library: run `npm run build` or `gulp dist` in ES6.
 The file `dist/krippendorff.min.js` will be re-generated and ready to use.
 
 #### References
