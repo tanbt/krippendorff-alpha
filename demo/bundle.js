@@ -102,14 +102,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 window.calculate = function calculate() {
-  let file = document.getElementById('csvInput').files[0];
-  if (!file) {
-    out('Please select a file');
-    return;
-  }
   let dataType = document.getElementById('dataType').value;
   if (!dataType) {
     out('Please select a data type');
+    return;
+  }
+
+  let json = document.getElementById('jsonInput').value;
+  if (json) {
+    let kripCal = new _src_krippendorff_js__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    kripCal.setJsonData(json, dataType);
+    kripCal.calculate();
+    out(kripCal._KrAlpha);
+    return;
+  }
+
+  let file = document.getElementById('csvInput').files[0];
+  if (!file) {
+    out('Please select a file');
     return;
   }
 
@@ -118,8 +128,10 @@ window.calculate = function calculate() {
     .then((result) => {
       const content = result.target.result;
       let arrData = parseCSVToArray(content).data;
-      let kripCal = new _src_krippendorff_js__WEBPACK_IMPORTED_MODULE_1__["default"](arrData, dataType);
-      out(JSON.stringify(kripCal._KrAlpha));
+      let kripCal = new _src_krippendorff_js__WEBPACK_IMPORTED_MODULE_1__["default"]();
+      kripCal.setArrayData(arrData, dataType);
+      kripCal.calculate();
+      out(kripCal._KrAlpha);
     });
 };
 
@@ -72728,17 +72740,37 @@ Object.freeze(DATATYPE);
 class Krippendorff {
 
   /**
-     * Init the calculator
-     *
-     * @param array data An javascript 2D array showing all ratings
-     * @param string dataType The data type of rating
-     */
-  constructor(data, dataType) {
+   * Init data for the calculator
+   *
+   * @param array data An javascript 2D array showing all ratings
+   * @param string dataType The data type of rating
+   */
+  setArrayData(data, dataType) {
+    this._data = data;
     this._dataType = DATATYPE[dataType];
     if (!dataType) {
       this._dataType = DATATYPE['categorical'];
     }
-    let filteredData = this._removeEmptyItem(data);
+  }
+
+  /**
+   * Init data for the calculator
+   *
+   * @param json data json string showing all ratings
+   * @param string dataType The data type of rating
+   */
+  setJsonData(data, dataType) {
+    const jsonObj = JSON.parse(data);
+    this._data = Object.keys(jsonObj).map(function(_) { return jsonObj[_]; });
+
+    this._dataType = DATATYPE[dataType];
+    if (!dataType) {
+      this._dataType = DATATYPE['categorical'];
+    }
+  }
+
+  calculate() {
+    let filteredData = this._removeEmptyItem(this._data);
     this._ratingValues = this._getUniqueRatingValues(filteredData);
     this._agreementTable = this._getAgreementTable(filteredData, this._ratingValues);
     this._n = this._agreementTable.length;
